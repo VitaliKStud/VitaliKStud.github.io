@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>py_spark.spark &mdash; DARIMA 23.08.2023 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/my_theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=7b807efb"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: black" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            DARIMA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../darima.html">Darima</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../py_spark.html">PySpark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../r.html">R Code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../py_handlers.html">Python Handlers</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: black" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">DARIMA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">py_spark.spark</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for py_spark.spark</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">spark.py</span>
+<span class="sd">~~~~~~~~</span>
+
+<span class="sd">Module containing helper function for use with Apache Spark</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">__main__</span>
+
+<span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">environ</span><span class="p">,</span> <span class="n">listdir</span><span class="p">,</span> <span class="n">path</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">pyspark</span> <span class="kn">import</span> <span class="n">SparkFiles</span>
+<span class="kn">from</span> <span class="nn">pyspark.sql</span> <span class="kn">import</span> <span class="n">SparkSession</span>
+
+<span class="kn">from</span> <span class="nn">py_spark</span> <span class="kn">import</span> <span class="n">logging</span>
+
+
+<div class="viewcode-block" id="start_spark">
+<a class="viewcode-back" href="../../py_spark.html#py_spark.spark.start_spark">[docs]</a>
+<span class="k">def</span> <span class="nf">start_spark</span><span class="p">(</span><span class="n">app_name</span><span class="o">=</span><span class="s1">&#39;my_spark_app&#39;</span><span class="p">,</span> <span class="n">master</span><span class="o">=</span><span class="s1">&#39;local[*]&#39;</span><span class="p">,</span> <span class="n">jar_packages</span><span class="o">=</span><span class="p">[],</span>
+                <span class="n">files</span><span class="o">=</span><span class="p">[],</span> <span class="n">spark_config</span><span class="o">=</span><span class="p">{}):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Start Spark session, get Spark logger and load config files.</span>
+
+<span class="sd">    Start a Spark session on the worker node and register the Spark</span>
+<span class="sd">    application with the cluster. Note, that only the app_name argument</span>
+<span class="sd">    will apply when this is called from a script sent to spark-submit.</span>
+<span class="sd">    All other arguments exist solely for testing the script from within</span>
+<span class="sd">    an interactive Python console.</span>
+
+<span class="sd">    This function also looks for a file ending in &#39;darima_config.json&#39; that</span>
+<span class="sd">    can be sent with the Spark job. If it is found, it is opened,</span>
+<span class="sd">    the contents parsed (assuming it contains valid JSON for the model</span>
+<span class="sd">    configuration) into a dict of model configuration parameters,</span>
+<span class="sd">    which are returned as the last element in the tuple returned by</span>
+<span class="sd">    this function. If the file cannot be found then the return tuple</span>
+<span class="sd">    only contains the Spark session and Spark logger objects and None</span>
+<span class="sd">    for config.</span>
+
+<span class="sd">    The function checks the enclosing environment to see if it is being</span>
+<span class="sd">    run from inside an interactive console session or from an</span>
+<span class="sd">    environment which has a `DEBUG` environment variable set (e.g.</span>
+<span class="sd">    setting `DEBUG=1` as an environment variable as part of a debug</span>
+<span class="sd">    configuration within an IDE such as Visual Studio Code or PyCharm.</span>
+<span class="sd">    In this scenario, the function uses all available function arguments</span>
+<span class="sd">    to start a PySpark driver from the local PySpark package as opposed</span>
+<span class="sd">    to using the spark-submit and Spark cluster defaults. This will also</span>
+<span class="sd">    use local module imports, as opposed to those in the zip archive</span>
+<span class="sd">    sent to spark via the --py-files flag in spark-submit.</span>
+
+<span class="sd">    :param app_name: Name of Spark app.</span>
+<span class="sd">    :param master: Cluster connection details (defaults to local[*]).</span>
+<span class="sd">    :param jar_packages: List of Spark JAR package names.</span>
+<span class="sd">    :param files: List of files to send to Spark cluster (master and</span>
+<span class="sd">        workers).</span>
+<span class="sd">    :param spark_config: Dictionary of config key-value pairs.</span>
+<span class="sd">    :return: A tuple of references to the Spark session, logger and</span>
+<span class="sd">        config dict (only if available).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># detect execution environment</span>
+    <span class="n">flag_repl</span> <span class="o">=</span> <span class="ow">not</span><span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">__main__</span><span class="p">,</span> <span class="s1">&#39;__file__&#39;</span><span class="p">))</span>
+    <span class="n">flag_debug</span> <span class="o">=</span> <span class="s1">&#39;DEBUG&#39;</span> <span class="ow">in</span> <span class="n">environ</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">flag_repl</span> <span class="ow">or</span> <span class="n">flag_debug</span><span class="p">):</span>
+        <span class="c1"># get Spark session factory</span>
+        <span class="n">spark_builder</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">SparkSession</span>
+            <span class="o">.</span><span class="n">builder</span>
+            <span class="o">.</span><span class="n">appName</span><span class="p">(</span><span class="n">app_name</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># get Spark session factory</span>
+        <span class="n">spark_builder</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">SparkSession</span>
+            <span class="o">.</span><span class="n">builder</span>
+            <span class="o">.</span><span class="n">master</span><span class="p">(</span><span class="n">master</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">appName</span><span class="p">(</span><span class="n">app_name</span><span class="p">))</span>
+
+        <span class="c1"># create Spark JAR packages string</span>
+        <span class="n">spark_jars_packages</span> <span class="o">=</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">jar_packages</span><span class="p">))</span>
+        <span class="n">spark_builder</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="s1">&#39;spark.jars.packages&#39;</span><span class="p">,</span> <span class="n">spark_jars_packages</span><span class="p">)</span>
+
+        <span class="n">spark_files</span> <span class="o">=</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">files</span><span class="p">))</span>
+        <span class="n">spark_builder</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="s1">&#39;spark.files&#39;</span><span class="p">,</span> <span class="n">spark_files</span><span class="p">)</span>
+
+        <span class="c1"># add other config params</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">spark_config</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">spark_builder</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span>
+
+    <span class="c1"># create session and retrieve Spark logger object</span>
+    <span class="n">spark_sess</span> <span class="o">=</span> <span class="n">spark_builder</span><span class="o">.</span><span class="n">getOrCreate</span><span class="p">()</span>
+    <span class="n">spark_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Log4j</span><span class="p">(</span><span class="n">spark_sess</span><span class="p">)</span>
+
+    <span class="c1"># get config file if sent to cluster with --files</span>
+    <span class="n">spark_files_dir</span> <span class="o">=</span> <span class="n">SparkFiles</span><span class="o">.</span><span class="n">getRootDirectory</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">spark_files_dir</span><span class="p">)</span>
+    <span class="n">config_files</span> <span class="o">=</span> <span class="p">[</span><span class="n">filename</span>
+                    <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">listdir</span><span class="p">(</span><span class="n">spark_files_dir</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">filename</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;config.json&#39;</span><span class="p">)]</span>
+
+    <span class="k">if</span> <span class="n">config_files</span><span class="p">:</span>
+        <span class="n">path_to_config_file</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">spark_files_dir</span><span class="p">,</span> <span class="n">config_files</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path_to_config_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">config_file</span><span class="p">:</span>
+            <span class="n">config_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">config_file</span><span class="p">)</span>
+        <span class="n">spark_logger</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;loaded config from &#39;</span> <span class="o">+</span> <span class="n">config_files</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">spark_logger</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;no config file found&#39;</span><span class="p">)</span>
+        <span class="n">config_dict</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">return</span> <span class="n">spark_sess</span><span class="p">,</span> <span class="n">spark_logger</span><span class="p">,</span> <span class="n">config_dict</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright -.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

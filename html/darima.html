@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Darima &mdash; DARIMA 23.08.2023 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="_static/my_theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=7b807efb"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="PySpark" href="py_spark.html" />
+    <link rel="prev" title="Overview" href="overview.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: black" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            DARIMA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Darima</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#darima-py">darima.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#darima.Darima"><code class="docutils literal notranslate"><span class="pre">Darima</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#darima.Darima.__init__"><code class="docutils literal notranslate"><span class="pre">Darima.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#darima.Darima.darima"><code class="docutils literal notranslate"><span class="pre">Darima.darima()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#darima.Darima.load_data_from_csv"><code class="docutils literal notranslate"><span class="pre">Darima.load_data_from_csv()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#darima.Darima.map_reduce"><code class="docutils literal notranslate"><span class="pre">Darima.map_reduce()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#darima.EvaluationDarima"><code class="docutils literal notranslate"><span class="pre">EvaluationDarima</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#darima.EvaluationDarima.__init__"><code class="docutils literal notranslate"><span class="pre">EvaluationDarima.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#darima.EvaluationDarima.model_evaluation"><code class="docutils literal notranslate"><span class="pre">EvaluationDarima.model_evaluation()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#darima.ForecastDarima"><code class="docutils literal notranslate"><span class="pre">ForecastDarima</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#darima.ForecastDarima.__init__"><code class="docutils literal notranslate"><span class="pre">ForecastDarima.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#darima.ForecastDarima.forecast_darima"><code class="docutils literal notranslate"><span class="pre">ForecastDarima.forecast_darima()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#darima.ForecastDarima.predict_ar"><code class="docutils literal notranslate"><span class="pre">ForecastDarima.predict_ar()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#darima.MapDarima"><code class="docutils literal notranslate"><span class="pre">MapDarima</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#darima.MapDarima.__init__"><code class="docutils literal notranslate"><span class="pre">MapDarima.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#darima.MapDarima.auto_arima"><code class="docutils literal notranslate"><span class="pre">MapDarima.auto_arima()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#darima.MapDarima.map_arima"><code class="docutils literal notranslate"><span class="pre">MapDarima.map_arima()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#darima.ReduceDarima"><code class="docutils literal notranslate"><span class="pre">ReduceDarima</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#darima.ReduceDarima.__init__"><code class="docutils literal notranslate"><span class="pre">ReduceDarima.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#darima.ReduceDarima.reduce_dlsa"><code class="docutils literal notranslate"><span class="pre">ReduceDarima.reduce_dlsa()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#darima.ReduceDarima.reduce_mean"><code class="docutils literal notranslate"><span class="pre">ReduceDarima.reduce_mean()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="py_spark.html">PySpark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="r.html">R Code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="py_handlers.html">Python Handlers</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: black" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">DARIMA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Darima</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/darima.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-darima">
+<span id="darima"></span><h1>Darima<a class="headerlink" href="#module-darima" title="Link to this heading"></a></h1>
+<section id="darima-py">
+<h2>darima.py<a class="headerlink" href="#darima-py" title="Link to this heading"></a></h2>
+</section>
+<dl class="py class">
+<dt class="sig sig-object py" id="darima.Darima">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">darima.</span></span><span class="sig-name descname"><span class="pre">Darima</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column_name_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'demand'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column_name_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'time'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/darima.html#Darima"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#darima.Darima" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Darima is the Meta Class for modelling.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="darima.Darima.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column_name_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'demand'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column_name_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'time'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/darima.html#Darima.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#darima.Darima.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initializing the datainput, columnnames and datalocation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>datapath</strong> (<em>str</em>) – path to the data should be .csv format</p></li>
+<li><p><strong>column_name_value</strong> (<em>str</em>) – The name of the Values column</p></li>
+<li><p><strong>column_name_time</strong> (<em>str</em>) – The name of the time column</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="darima.Darima.darima">
+<span class="sig-name descname"><span class="pre">darima</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/darima.html#Darima.darima"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#darima.Darima.darima" title="Link to this definition"></a></dt>
+<dd><p>Creating a spark Session named DarimaModel.</p>
+<p>Calling values from darima_config.json.</p>
+<p>Main darima method. Calling all needed methods to get the coefficients.</p>
+<p>Map-Reduce step is done here.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="darima.Darima.load_data_from_csv">
+<span class="sig-name descname"><span class="pre">load_data_from_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spark</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/darima.html#Darima.load_data_from_csv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#darima.Darima.load_data_from_csv" title="Link to this definition"></a></dt>
+<dd><p>Load data from CSV file format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>spark</strong> – Spark session object.</p></li>
+<li><p><strong>filename</strong> – CSV filename</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Spark DataFrame.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="darima.Darima.map_reduce">
+<span class="sig-name descname"><span class="pre">map_reduce</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">RDD</span></span></span><a class="reference internal" href="_modules/darima.html#Darima.map_reduce"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#darima.Darima.map_reduce" title="Link to this definition"></a></dt>
+<dd><p>Transform original dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>df</strong> – Input DataFrame.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Transformed DataFrame.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="darima.EvaluationDarima">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">darima.</span></span><span class="sig-name descname"><span class="pre">EvaluationDarima</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/darima.html#EvaluationDarima"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#darima.EvaluationDarima" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#darima.Darima" title="darima.Darima"><code class="xref py py-class docutils literal notranslate"><span class="pre">Darima</span></code></a></p>
+<p>Is the main forecasting class. This class inherit Darima class. Is calculating the result</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="darima.EvaluationDarima.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/darima.html#EvaluationDarima.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#darima.EvaluationDarima.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initializing the datainput, columnnames and datalocation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>datapath</strong> (<em>str</em>) – path to the data should be .csv format</p></li>
+<li><p><strong>column_name_value</strong> (<em>str</em>) – The name of the Values column</p></li>
+<li><p><strong>column_name_time</strong> (<em>str</em>) – The name of the time column</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="darima.EvaluationDarima.model_evaluation">
+<span class="sig-name descname"><span class="pre">model_evaluation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">log</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pred</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[80,</span> <span class="pre">95]</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/darima.html#EvaluationDarima.model_evaluation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#darima.EvaluationDarima.model_evaluation" title="Link to this definition"></a></dt>
+<dd><p>Calculates the evaluation metrics between the predictions and actiual test data.
+Use additionally test data to calculate scaling coefficient for evaluation metrics.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>log</strong> – PySpark Logger</p></li>
+<li><p><strong>train</strong> – Train data, used to train ARIMA-Models</p></li>
+<li><p><strong>test</strong> – Test data</p></li>
+<li><p><strong>period</strong> – Frequency of observations</p></li>
+<li><p><strong>pred</strong> – Predicted values</p></li>
+<li><p><strong>lower</strong> – Lower bounds for predicted values</p></li>
+<li><p><strong>upper</strong> – Upper bounds for predicted values</p></li>
+<li><p><strong>level</strong> (<em>List</em><em>, </em><em>np.ndarray</em><em>, </em><em>int</em><em> or </em><em>float</em>) – Values used for alpha calculation, therefore MSIS value one per level</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Out DF with named evaluation metrics</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="darima.ForecastDarima">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">darima.</span></span><span class="sig-name descname"><span class="pre">ForecastDarima</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/darima.html#ForecastDarima"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#darima.ForecastDarima" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#darima.Darima" title="darima.Darima"><code class="xref py py-class docutils literal notranslate"><span class="pre">Darima</span></code></a></p>
+<p>Is the main forecasting class. This class inherit Darima class. Is calculating the predictions of the
+coefficients of Darima. Is the main class for forecasting.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="darima.ForecastDarima.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/darima.html#ForecastDarima.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#darima.ForecastDarima.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initializing the datainput, columnnames and datalocation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>datapath</strong> (<em>str</em>) – path to the data should be .csv format</p></li>
+<li><p><strong>column_name_value</strong> (<em>str</em>) – The name of the Values column</p></li>
+<li><p><strong>column_name_time</strong> (<em>str</em>) – The name of the time column</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="darima.ForecastDarima.forecast_darima">
+<span class="sig-name descname"><span class="pre">forecast_darima</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">24</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[80,</span> <span class="pre">95]</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/darima.html#ForecastDarima.forecast_darima"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#darima.ForecastDarima.forecast_darima" title="Link to this definition"></a></dt>
+<dd><p>Forecasts values over the given horizon in the future. The predictions are formed as pandas (Time-) series.
+The results of forecast are additionaly dumped in form of the json document for further analysis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Theta</strong> – Array of the ARIMA-coefficients (except sigma)</p></li>
+<li><p><strong>sigma2</strong> – Sigma value</p></li>
+<li><p><strong>x</strong> – Train data to make the predictions on</p></li>
+<li><p><strong>period</strong> – Frequency of observations</p></li>
+<li><p><strong>h</strong> – Forecasting horizon</p></li>
+<li><p><strong>level</strong> – Confidention levels used to calculated confidential intervals for each predicted value</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dictionary with fitted, predictions, lower/upper bounds, and residuals</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="darima.ForecastDarima.predict_ar">
+<span class="sig-name descname"><span class="pre">predict_ar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_ahead</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">se_fit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/darima.html#ForecastDarima.predict_ar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#darima.ForecastDarima.predict_ar" title="Link to this definition"></a></dt>
+<dd><p>Predicts the values by applying autoregressive model.
+Optionally calculated standard errors for the made predictions over the given horizon.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Theta</strong> – Array of the ARIMA-coefficients (except sigma)</p></li>
+<li><p><strong>sigma2</strong> – Sigma value</p></li>
+<li><p><strong>x</strong> – Train data to make the predictions on</p></li>
+</ul>
+</dd>
+</dl>
+<p>:param n_ahead Forecasting horizon
+:param se_fit: Whether standard errors should be included in the output
+:return: Dictionary including residuals, fitted values and predictions
+:rtype: dict</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="darima.MapDarima">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">darima.</span></span><span class="sig-name descname"><span class="pre">MapDarima</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/darima.html#MapDarima"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#darima.MapDarima" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#darima.Darima" title="darima.Darima"><code class="xref py py-class docutils literal notranslate"><span class="pre">Darima</span></code></a></p>
+<p>Is the main class for the Map step. This class inherit Darima class.
+Mapping every partition and calculating the coefficients. Uses R intergrated functions
+like auto.arima and ts. Also preparing a partition for calculations and convertering
+given partition into a timeseries. map_arima is the main-method within this class.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="darima.MapDarima.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/darima.html#MapDarima.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#darima.MapDarima.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initializing the datainput, columnnames and datalocation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>datapath</strong> (<em>str</em>) – path to the data should be .csv format</p></li>
+<li><p><strong>column_name_value</strong> (<em>str</em>) – The name of the Values column</p></li>
+<li><p><strong>column_name_time</strong> (<em>str</em>) – The name of the time column</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="darima.MapDarima.auto_arima">
+<span class="sig-name descname"><span class="pre">auto_arima</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ts</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/darima.html#MapDarima.auto_arima"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#darima.MapDarima.auto_arima" title="Link to this definition"></a></dt>
+<dd><p>Calling the R-Package within this project.</p>
+<p>Working with R-Objects.</p>
+<p>Is calling the function auto_arima within the R-Package.</p>
+<p>Converting values into a valid Python object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ts</strong> (<em>Should be R-TimeSeries</em>) – TimeSeries</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Will return List of tuples with named coefficients</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list(tuple())</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="darima.MapDarima.map_arima">
+<span class="sig-name descname"><span class="pre">map_arima</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterator</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/darima.html#MapDarima.map_arima"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#darima.MapDarima.map_arima" title="Link to this definition"></a></dt>
+<dd><p>Will go through a partition (iterator)  convert it into an R-TimeSeries and yield the coefficients.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>iterator</strong> (<em>spark RDD format</em>) – A partion of a spark RDD</p></li>
+<li><p><strong>frequency</strong> (<em>int</em>) – See documentation of convert_to_r_time_series (4, 12, 24, 60, 3600)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Will return a list of tuples with all coefficients</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list(tuple())</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="darima.ReduceDarima">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">darima.</span></span><span class="sig-name descname"><span class="pre">ReduceDarima</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/darima.html#ReduceDarima"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#darima.ReduceDarima" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#darima.Darima" title="darima.Darima"><code class="xref py py-class docutils literal notranslate"><span class="pre">Darima</span></code></a></p>
+<p>Is the main class for the Reduce step. This class inherit Darima class.
+Got two main-methods, reduce_dlsa (Distributed Least Squares Approximation) and reduce_mean.
+Will return processed coefficients.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="darima.ReduceDarima.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/darima.html#ReduceDarima.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#darima.ReduceDarima.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initializing the datainput, columnnames and datalocation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>datapath</strong> (<em>str</em>) – path to the data should be .csv format</p></li>
+<li><p><strong>column_name_value</strong> (<em>str</em>) – The name of the Values column</p></li>
+<li><p><strong>column_name_time</strong> (<em>str</em>) – The name of the time column</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="darima.ReduceDarima.reduce_dlsa">
+<span class="sig-name descname"><span class="pre">reduce_dlsa</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">converted_ts_rdd</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">RDD</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">RDD</span></span></span><a class="reference internal" href="_modules/darima.html#ReduceDarima.reduce_dlsa"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#darima.ReduceDarima.reduce_dlsa" title="Link to this definition"></a></dt>
+<dd><p>Calculating for a RDD partition the sum for all key-value pairs.
+Is created for getting the sum of all the coefficients.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>converted_ts_rdd</strong> (<em>RDD Format</em>) – Should be all the coefficients</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Sum over Keys</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>RDD Format</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="darima.ReduceDarima.reduce_mean">
+<span class="sig-name descname"><span class="pre">reduce_mean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">converted_ts_rdd</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">RDD</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">RDD</span></span></span><a class="reference internal" href="_modules/darima.html#ReduceDarima.reduce_mean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#darima.ReduceDarima.reduce_mean" title="Link to this definition"></a></dt>
+<dd><p>Calculating mean of the ARIMA coefficients across all partitions</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>converted_ts_rdd</strong> (<em>RDD Format</em>) – Should be all the coefficients</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Result (reduced) list of tuples [(coef_1, value), (coef_2, value), …]</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>RDD Format</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="overview.html" class="btn btn-neutral float-left" title="Overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="py_spark.html" class="btn btn-neutral float-right" title="PySpark" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright -.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

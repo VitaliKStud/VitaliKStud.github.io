@@ -9,7 +9,11 @@ Welcome to Dashboard Layout's documentation!
 .. toctree::
    :caption: Contents:
 
-   video_labeler
+   overview
+   darima
+   py_spark
+   r
+   py_handlers
 
 Indices and tables
 ==================

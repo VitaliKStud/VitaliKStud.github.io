@@ -1,7 +1,7 @@
-Video Labeler
+Darima
 ==========================
 
-.. automodule:: video_labeler
+.. automodule:: darima
    :members:
    :undoc-members:
    :show-inheritance:

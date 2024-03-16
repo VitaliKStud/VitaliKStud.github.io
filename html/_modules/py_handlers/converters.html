@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>py_handlers.converters &mdash; DARIMA 23.08.2023 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/my_theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=7b807efb"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: black" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            DARIMA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../darima.html">Darima</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../py_spark.html">PySpark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../r.html">R Code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../py_handlers.html">Python Handlers</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: black" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">DARIMA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">py_handlers.converters</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for py_handlers.converters</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">rpy2.robjects</span> <span class="k">as</span> <span class="nn">robjects</span>
+<span class="kn">from</span> <span class="nn">pyspark.sql</span> <span class="kn">import</span> <span class="n">DataFrame</span>
+
+<span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">col</span>
+<span class="kn">from</span> <span class="nn">pyspark.sql.types</span> <span class="kn">import</span> <span class="n">TimestampType</span><span class="p">,</span> <span class="n">Row</span>
+
+
+<div class="viewcode-block" id="convert_to_r_time_series">
+<a class="viewcode-back" href="../../py_handlers.html#py_handlers.converters.convert_to_r_time_series">[docs]</a>
+<span class="k">def</span> <span class="nf">convert_to_r_time_series</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
+                             <span class="n">data_time</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
+                             <span class="n">frequency</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">12</span><span class="p">,</span>
+                             <span class="n">is_datetime</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                             <span class="nb">format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">robjects</span><span class="o">.</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;ts&quot;</span><span class="p">]:</span>
+
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts data to a FloatVector in R, creating a time series object.</span>
+<span class="sd">    data.index need to be frequently (Timestamps / frequence)</span>
+<span class="sd">    This need to be passed into auto.arima()</span>
+
+<span class="sd">    :param data: Values / f(x)</span>
+<span class="sd">    :type data: pd.Series</span>
+<span class="sd">    :param data_time: Time-Values / x</span>
+<span class="sd">    :type data_time: pd.Series</span>
+<span class="sd">    :param frequency: 4: Quarterly, 12 Monthly, 24 Hourly, 60 Minutely, 3600 Secondly</span>
+<span class="sd">    :type frequency: int</span>
+<span class="sd">    :param is_datetime: is_date checking, if its correct</span>
+<span class="sd">    :type is_datetime: Boolean</span>
+<span class="sd">    :param format: dateformat</span>
+<span class="sd">    :type format: str</span>
+<span class="sd">    :return: TimeSeries in R</span>
+<span class="sd">    :rtype: robjects.r[&quot;ts&quot;] &lt;- This type</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Convert the pandas Series to an R FloatVector</span>
+    <span class="n">converted_object</span> <span class="o">=</span> <span class="n">robjects</span><span class="o">.</span><span class="n">FloatVector</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="c1"># Convert the pandas Series index to R Date format</span>
+    <span class="k">if</span> <span class="n">is_datetime</span><span class="p">:</span>
+        <span class="n">r_date_vector</span> <span class="o">=</span> <span class="n">robjects</span><span class="o">.</span><span class="n">StrVector</span><span class="p">(</span><span class="n">data_time</span><span class="p">)</span>
+        <span class="n">frequence_index</span> <span class="o">=</span> <span class="n">robjects</span><span class="o">.</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;as.POSIXct&#39;</span><span class="p">](</span><span class="n">r_date_vector</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="nb">format</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;INFORMATION: data.index should be a datetime-format&quot;</span><span class="p">)</span>
+        <span class="n">frequence_index</span> <span class="o">=</span> <span class="n">robjects</span><span class="o">.</span><span class="n">IntVector</span><span class="p">(</span><span class="n">data_time</span><span class="p">)</span>
+
+    <span class="c1"># Create a time series object with the converted data and time index</span>
+    <span class="n">ts_data</span> <span class="o">=</span> <span class="n">robjects</span><span class="o">.</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;ts&quot;</span><span class="p">](</span><span class="n">converted_object</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="n">frequence_index</span><span class="p">),</span> <span class="n">frequency</span><span class="o">=</span><span class="n">frequency</span><span class="p">)</span>
+    <span class="n">is_ts</span> <span class="o">=</span> <span class="n">robjects</span><span class="o">.</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;is.ts&quot;</span><span class="p">](</span><span class="n">ts_data</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;INFORMATION: Is a TimeSeries: </span><span class="si">{</span><span class="n">is_ts</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">converted_object</span></div>
+
+
+
+<div class="viewcode-block" id="rvector_to_list_of_tuples">
+<a class="viewcode-back" href="../../py_handlers.html#py_handlers.converters.rvector_to_list_of_tuples">[docs]</a>
+<span class="k">def</span> <span class="nf">rvector_to_list_of_tuples</span><span class="p">(</span><span class="n">r_vector</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts named R vector to a list of tuples [(coef_1, value), (coef_2, value2)...]</span>
+<span class="sd">    :return: Pandas DataFrame</span>
+<span class="sd">    :rtype: pd.Series</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">python_list</span> <span class="o">=</span> <span class="n">robjects</span><span class="o">.</span><span class="n">conversion</span><span class="o">.</span><span class="n">rpy2py</span><span class="p">(</span><span class="n">r_vector</span><span class="p">)</span>
+    
+    <span class="c1"># Get names of the R vector</span>
+    <span class="n">names</span> <span class="o">=</span> <span class="n">robjects</span><span class="o">.</span><span class="n">r</span><span class="o">.</span><span class="n">names</span><span class="p">(</span><span class="n">r_vector</span><span class="p">)</span>
+    
+    <span class="c1"># Create a list of tuples with name-value pairs</span>
+    <span class="n">result</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[(</span><span class="n">names</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">python_list</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">python_list</span><span class="p">))]</span>
+
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+
+<div class="viewcode-block" id="convert_result_to_df">
+<a class="viewcode-back" href="../../py_handlers.html#py_handlers.converters.convert_result_to_df">[docs]</a>
+<span class="k">def</span> <span class="nf">convert_result_to_df</span><span class="p">(</span><span class="n">result</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Will convert the results into structured DataFrames.</span>
+
+<span class="sd">    from: [(coef_1, value), (coef_2, value2)...]</span>
+<span class="sd">    to: Pandas DataFrame</span>
+
+<span class="sd">    Result is a merged dataframe from following parts:</span>
+<span class="sd">    </span>
+<span class="sd">    - A pd.DataFrame with the ar coefficients;</span>
+<span class="sd">    - A pd.DataFrame with the sigma coefficients;</span>
+<span class="sd">    - A pd.DataFrame with the beta coefficients.</span>
+
+<span class="sd">    :param result: results coefficients</span>
+<span class="sd">    :type result: list of tuples</span>
+<span class="sd">    :return: result</span>
+<span class="sd">    :rtype: pd.DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;coef&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">])</span>
+    <span class="n">df_ar</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;coef&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s2">&quot;ar&quot;</span><span class="p">)]</span>
+    <span class="n">df_ar</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="s1">&#39;coef&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;ar_&quot;</span> <span class="o">+</span> <span class="n">df_ar</span><span class="p">[</span><span class="s1">&#39;coef&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;ar&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">x</span><span class="si">:</span><span class="s1">08d</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">df_ar</span> <span class="o">=</span> <span class="n">df_ar</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s2">&quot;coef&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="c1"># combine sigma and betas coefficients</span>
+    <span class="n">df_sigma</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;coef&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s2">&quot;sigma&quot;</span><span class="p">)]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">df_beta</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;coef&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s2">&quot;beta&quot;</span><span class="p">)]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="c1"># combine all dataframes</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df_ar</span><span class="p">,</span> <span class="n">df_sigma</span><span class="p">,</span> <span class="n">df_beta</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+
+<div class="viewcode-block" id="convert_spark_2_pandas_ts">
+<a class="viewcode-back" href="../../py_handlers.html#py_handlers.converters.convert_spark_2_pandas_ts">[docs]</a>
+<span class="k">def</span> <span class="nf">convert_spark_2_pandas_ts</span><span class="p">(</span><span class="n">spark_df</span><span class="p">,</span> <span class="n">column_name_time</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts Spark DataFrame to Pandas (Time-) Series</span>
+<span class="sd">    :return: Pandas DataFrame</span>
+<span class="sd">    :rtype: pd.Series</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">spark_df</span><span class="p">:</span> <span class="n">DataFrame</span> <span class="o">=</span> <span class="n">spark_df</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="n">column_name_time</span><span class="p">,</span> <span class="n">col</span><span class="p">(</span><span class="n">column_name_time</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">TimestampType</span><span class="p">()))</span>
+    <span class="n">rows</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">spark_df</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+
+    <span class="c1"># Convert the list of Row objects to a Pandas DataFrame</span>
+    <span class="n">pandas_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">spark_df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+    <span class="n">pandas_df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="n">column_name_time</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">pandas_ts</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span> <span class="o">=</span> <span class="n">pandas_df</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+    
+    <span class="k">return</span> <span class="n">pandas_ts</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright -.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
