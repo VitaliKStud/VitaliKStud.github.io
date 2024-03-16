@@ -1,5 +1,0 @@
-R Code
-==========================
-
-.. literalinclude:: ../auto_arima.R
-   :language: r
